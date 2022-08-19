@@ -1,0 +1,26 @@
+{
+  "name": "index.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon Server/index.js",
+    "test": "node index.js"
+  },
+  "keywords": [
+    "social-media"
+  ],
+  "author": "Jubayer Juhan",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.2",
+    "node-mailjet": "^5.1.1",
+    "validator": "^13.7.0"
+  }
+}
