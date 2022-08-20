@@ -1,5 +1,6 @@
 import catchAsyncError from "../middlewares/catchasyncError.js";
 import usermodal from "../Modals/usermodal.js";
+import friendsModal from "../Modals/friendsModal.js";
 import Errorhandler from "../Utils/errorHandle.js";
 import { sendJwtToken } from "../Utils/jwtToken.js";
 
@@ -15,6 +16,18 @@ export const createUser = catchAsyncError(async (req, res, next) => {
   //create user
   const user = await usermodal.create(req.body);
   const otpStatus = await user.sendOtp();
+
+  const friends = await friendsModal.create({
+    user: user._id,
+    friends: [],
+  });
+
+  // update user with friends id
+  user.friends = friends._id;
+  await user.save();
+
+  // a friend request is sent to the user
+  // const friendRequest = await user.sendFriendRequest();
 
   sendJwtToken(res, next, user);
 });
@@ -100,4 +113,17 @@ export const loginUser = catchAsyncError(async (req, res, next) => {
   const validPass = await user.passwordComparison(password);
 
   if (validPass) return sendJwtToken(res, next, user);
+});
+
+// get single user
+export const getSingleUser = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await usermodal.findById(id).populate("friends", "user");
+  if (!user) return next(new Errorhandler("User Not Found", 404));
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });

@@ -1,6 +1,6 @@
 // import { Schema } from "mongoose";
-import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 import validator from "validator";
 import Errorhandler from "../Utils/errorHandle.js";
@@ -11,6 +11,10 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: true,
+  },
+  friends: {
+    type: Schema.Types.ObjectId,
+    ref: "friends",
   },
   email: {
     type: String,

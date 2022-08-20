@@ -18,8 +18,9 @@ export const sendJwtToken = async (res, next, user) => {
 export const verifyJwtToken = async (req, res, next) => {
   // getting the token from auth header
   const authHeader = req.headers.authorization;
-  const token = authHeader.split(" ")[1];
+  if (!authHeader) return next(new Errorhandler("No jwt token found", 404));
 
+  const token = authHeader.split(" ")[1];
   // if there is no token
   if (!token) return next(new Errorhandler("No jwt token found", 404));
 
