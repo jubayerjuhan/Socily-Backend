@@ -127,3 +127,40 @@ export const getSingleUser = catchAsyncError(async (req, res, next) => {
     user,
   });
 });
+
+// search user
+export const searchUser = catchAsyncError(async (req, res, next) => {
+  const { name } = req.params;
+
+  let users = await usermodal
+    .find({ name: { $regex: name, $options: "i" } })
+    .select("name avater");
+  if (!users) return next(new Errorhandler("User Not Found", 404));
+
+  const friends = await friendsModal.findOne({ user: req.user._id });
+
+  const prioritySearch = [];
+
+  users.map((user) => {
+    if (friends.friends.includes(user._id)) prioritySearch.push(user);
+    users = users.filter((user) => !prioritySearch.includes(user));
+  });
+
+  users = [...prioritySearch, ...users];
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+// get me
+export const getMe = catchAsyncError(async (req, res, next) => {
+  const user = await usermodal
+    .findById(req.user.id)
+    .populate("friends", "user");
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { connectDatabase } from "./Database/db.js";
 import userRoute from "./Routes/userrRoutes.js";
 import friendRoute from "./Routes/friendroute.js";
+import postRoute from "./Routes/postRoute.js";
 import bodyParser from "body-parser";
 import { errorMiddleWare } from "./middlewares/errorMiddleware.js";
 
@@ -24,6 +25,7 @@ connectDatabase();
 
 app.use("/api", userRoute);
 app.use("/api", friendRoute);
+app.use("/api", postRoute);
 
 app.listen(port, () => {
   console.log("Server is running on port " + port, "....");
