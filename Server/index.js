@@ -7,6 +7,7 @@ import friendRoute from "./Routes/friendroute.js";
 import postRoute from "./Routes/postRoute.js";
 import bodyParser from "body-parser";
 import { errorMiddleWare } from "./middlewares/errorMiddleware.js";
+import cors from "cors";
 
 const app = express();
 const port = 5000;
@@ -14,6 +15,9 @@ const port = 5000;
 // config body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// adding cors
+app.use(cors());
 
 // get multer image
 app.use("/uploads", express.static("./Server/uploads"), (req, res, next) => {

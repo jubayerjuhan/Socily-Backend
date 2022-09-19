@@ -57,7 +57,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.sendOtp = async function () {
   const otp = Math.floor(100000 + Math.random() * 900000);
   this.otp = otp;
-  this.otpValidTill = Date.now() + 1 * 60 * 1000;
+  this.otpValidTill = Date.now() + 3 * 60 * 1000;
   const name = this.name;
   const email = this.email;
   await this.save({ validateBeforeSave: false });

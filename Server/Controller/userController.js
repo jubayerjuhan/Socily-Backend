@@ -34,8 +34,8 @@ export const createUser = catchAsyncError(async (req, res, next) => {
 
 // -----------verify user through otp--------------------
 export const verifyUser = catchAsyncError(async (req, res, next) => {
-  console.log(req.user, "user from req");
-  const { otp, email } = req.body;
+  const { otp } = req.body;
+  const email = req.user.email;
   console.log(otp, email);
 
   // check if there otp or email missing on body;
@@ -58,9 +58,10 @@ export const verifyUser = catchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Otp Expired", 400));
 
   // compare otp
-  if (otp !== user.otp) return next(new Errorhandler("Otp is incorrect", 400));
+  if (parseFloat(otp) !== user.otp)
+    return next(new Errorhandler("Otp is incorrect", 400));
 
-  if (otp === user.otp) {
+  if (parseFloat(otp) === user.otp) {
     user.verified = true;
     user.otp = null;
     user.otpValidTill = null;
@@ -78,7 +79,7 @@ export const verifyUser = catchAsyncError(async (req, res, next) => {
 export const sendOtpAgain = catchAsyncError(async (req, res, next) => {
   // check if there email missing on body;
   if (!req.body.email)
-    return next(new Errorhandler("Please Fill All Fields", 400));
+    return next(new Errorhandler("No Email Address Found To Send Otp", 400));
 
   // searching for user with email
   const userArray = await usermodal.find({ email: req.body.email });
